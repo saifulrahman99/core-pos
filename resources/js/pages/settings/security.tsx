@@ -1,4 +1,5 @@
 import { Form, Head } from '@inertiajs/react';
+import { AlertTriangle } from 'lucide-react';
 import { useRef } from 'react';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
 import Heading from '@/components/heading';
@@ -8,12 +9,14 @@ import ManagePasskeys from '@/components/manage-passkeys';
 import type { Props as ManageTwoFactorProps } from '@/components/manage-two-factor';
 import ManageTwoFactor from '@/components/manage-two-factor';
 import PasswordInput from '@/components/password-input';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { edit } from '@/routes/security';
 
 type Props = {
     passwordRules: string;
+    isTwoFactorRequired?: boolean;
 } & ManagePasskeysProps &
     ManageTwoFactorProps;
 
@@ -28,6 +31,17 @@ export default function Security(props: Props) {
             <h1 className="sr-only">Security settings</h1>
 
             <div className="space-y-6">
+                {props.isTwoFactorRequired && !props.twoFactorEnabled && (
+                    <Alert variant="destructive">
+                        <AlertTriangle className="h-4 w-4" />
+                        <AlertTitle>Two-factor authentication is required</AlertTitle>
+                        <AlertDescription>
+                            Your role requires two-factor authentication. Please
+                            enable it below to continue using the system.
+                        </AlertDescription>
+                    </Alert>
+                )}
+
                 <Heading
                     variant="small"
                     title="Update password"
