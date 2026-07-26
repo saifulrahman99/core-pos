@@ -5,21 +5,21 @@ import { Button } from '@/components/ui/button';
 import InputError from '@/components/input-error';
 import { ArrowLeft } from 'lucide-react';
 import type { CategoryProps } from './types';
-import { create, update } from '@/routes/admin/categories';
+import { index, update } from '@/routes/admin/categories';
 
 export default function CategoryEdit({ category }: CategoryProps) {
     const { data, setData, post, processing, errors, reset } = useForm({
-        name: category.name,
-        slug: category.slug,
-        description: category.description ?? '',
+        name: category.data.name,
+        slug: category.data.slug,
+        description: category.data.description ?? '',
         image: null as File | null,
-        status: category.status,
-        sort_order: category.sort_order,
+        status: category.data.status,
+        sort_order: category.data.sort_order,
     });
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        post(update.url(category.id), {
+        post(update.url(category.data.id), {
             preserveScroll: true,
             onSuccess: () => reset(),
         });
@@ -27,12 +27,12 @@ export default function CategoryEdit({ category }: CategoryProps) {
 
     return (
         <>
-            <Head title={`Edit ${category.name}`} />
+            <Head title={`Edit ${category.data.name}`} />
 
             <div className="px-4 py-6 space-y-6">
                 <div className="flex items-center gap-4">
                     <Button variant="outline" size="sm" asChild>
-                        <Link href={create.index.url()}>
+                        <Link href={index.url()}>
                             <ArrowLeft className="h-4 w-4" />
                         </Link>
                     </Button>
@@ -84,8 +84,8 @@ export default function CategoryEdit({ category }: CategoryProps) {
                                 setData('image', file);
                             }}
                         />
-                        {category.image && (
-                            <img src={category.image} alt={category.name} className="h-20 w-20 object-cover rounded-md border" />
+                        {category.data.image && (
+                            <img src={category.data.image} alt={category.data.name} className="h-20 w-20 object-cover rounded-md border" />
                         )}
                         <InputError message={errors.image} />
                     </div>
@@ -121,7 +121,7 @@ export default function CategoryEdit({ category }: CategoryProps) {
                             Update Category
                         </Button>
                         <Button type="button" variant="outline" asChild>
-                            <Link href={create.index.url()}>Cancel</Link>
+                            <Link href={index.url()}>Cancel</Link>
                         </Button>
                     </div>
                 </form>
@@ -130,7 +130,7 @@ export default function CategoryEdit({ category }: CategoryProps) {
     );
 }
 
-CategoryEdit.layout = {
+CategoryEdit.layout = ({ category }: CategoryProps) => ({
     breadcrumbs: [
         {
             title: 'Categories',
@@ -138,7 +138,7 @@ CategoryEdit.layout = {
         },
         {
             title: 'Edit',
-            href: `/admin/categories/${category.id}/edit`,
+            href: `/admin/categories/${category.data.id}/edit`,
         },
     ],
-};
+});

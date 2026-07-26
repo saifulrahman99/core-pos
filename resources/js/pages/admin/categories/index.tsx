@@ -14,9 +14,11 @@ import {
     AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { ImageIcon, ArrowUpDown, CalendarIcon } from 'lucide-react';
 
 import type { CategoryIndexProps } from './types';
 
@@ -79,30 +81,70 @@ export default function CategoryIndex({ categories, filters }: CategoryIndexProp
                         <p className="text-sm text-muted-foreground">No categories found.</p>
                     ) : (
                         categories.data.map((category) => (
-                            <Card key={category.id}>
-                                <CardContent className="flex items-center justify-between py-4">
-                                    <div className="space-y-1">
-                                        <p className="text-sm font-medium">{category.name}</p>
-                                        <p className="text-xs text-muted-foreground">
-                                            {category.slug}
-                                            {category.description && (
-                                                <> · {category.description}</>
+                            <Card key={category.id} className="overflow-hidden">
+                                <CardHeader className="p-4">
+                                    <div className="flex items-start gap-4">
+                                        {/* Image thumbnail */}
+                                        <div className="relative h-20 w-20 flex-shrink-0 rounded-lg border bg-muted overflow-hidden">
+                                            {category.image ? (
+                                                <img
+                                                    src={category.image}
+                                                    alt={category.name}
+                                                    className="h-full w-full object-cover"
+                                                />
+                                            ) : (
+                                                <div className="flex h-full items-center justify-center">
+                                                    <ImageIcon className="h-8 w-8 text-muted-foreground" />
+                                                </div>
                                             )}
-                                        </p>
+                                        </div>
+                                        
+                                        {/* Category info */}
+                                        <div className="flex-1 min-w-0">
+                                            <div className="flex items-center gap-2">
+                                                <CardTitle className="text-lg font-medium">{category.name}</CardTitle>
+                                                <Badge variant={category.status ? 'default' : 'secondary'}>
+                                                    {category.status ? 'Active' : 'Inactive'}
+                                                </Badge>
+                                            </div>
+                                            
+                                            <div className="mt-2 flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                                                <span className="flex items-center gap-1">
+                                                    <ArrowUpDown className="h-3 w-3" />
+                                                    Sort: {category.sort_order}
+                                                </span>
+                                                <span className="flex items-center gap-1">
+                                                    <CalendarIcon className="h-3 w-3" />
+                                                    Created: {new Date(category.created_at).toLocaleDateString()}
+                                                </span>
+                                            </div>
+                                            
+                                            {category.description && (
+                                                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                                                    {category.description}
+                                                </p>
+                                            )}
+                                            
+                                            <p className="mt-1 text-xs text-muted-foreground font-mono">
+                                                Slug: {category.slug}
+                                            </p>
+                                        </div>
+                                        
+                                        {/* Actions */}
+                                        <div className="flex flex-col items-end gap-2">
+                                            <Button variant="outline" size="sm" asChild>
+                                                <Link href={edit.url(category.id)}>Edit</Link>
+                                            </Button>
+                                            <Button
+                                                variant="destructive"
+                                                size="sm"
+                                                onClick={() => setDeleteTarget({ id: category.id, name: category.name })}
+                                            >
+                                                Delete
+                                            </Button>
+                                        </div>
                                     </div>
-                                    <div className="flex items-center gap-2">
-                                        <Button variant="outline" size="sm" asChild>
-                                            <Link href={edit.url(category.id)}>Edit</Link>
-                                        </Button>
-                                        <Button
-                                            variant="destructive"
-                                            size="sm"
-                                            onClick={() => setDeleteTarget({ id: category.id, name: category.name })}
-                                        >
-                                            Delete
-                                        </Button>
-                                    </div>
-                                </CardContent>
+                                </CardHeader>
                             </Card>
                         ))
                     )}
