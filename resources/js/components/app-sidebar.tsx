@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, History, LayoutGrid, Settings, Shield, Users } from 'lucide-react';
+import { BookOpen, FolderGit2, History, LayoutGrid, List, Settings, Shield, Users } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
 import { index as activityLogsIndex } from '@/routes/admin/activity-logs';
+import { index as categoriesIndex } from '@/routes/admin/categories';
 import { index as rolesIndex } from '@/routes/admin/roles';
 import { index as usersIndex } from '@/routes/admin/users';
 import { edit as settingsEdit } from '@/routes/profile';
@@ -25,6 +26,11 @@ const mainNavItems: NavItem[] = [
         title: 'Dashboard',
         href: dashboard(),
         icon: LayoutGrid,
+    },
+    {
+        title: 'Categories',
+        href: categoriesIndex.url(),
+        icon: List,
     },
     {
         title: 'Roles',
