@@ -22,5 +22,5 @@ Route::post('auth/mfa-reset/verify/{token}', [MfaResetVerifyController::class, '
 Route::get('auth/mfa-reset/success', [MfaResetVerifyController::class, 'success'])
     ->name('mfa.reset.success');
 
-require __DIR__.'/settings.php';
-require __DIR__.'/admin.php';
+    require __DIR__.'/admin.php';
+    require __DIR__.'/settings.php';
