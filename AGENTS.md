@@ -1,3 +1,73 @@
+# AGENTS.md
+
+This repository contains a production-ready Point of Sale (POS) system built with Laravel 13, Inertia.js, React 19, TypeScript, and Tailwind CSS v4.
+
+Before implementing any feature, always read the documentation inside the `docs/` directory.
+
+## Existing Project
+
+This project already uses the official Laravel Starter Kit with Inertia.js and React.
+
+Always extend the existing architecture.
+
+Do not replace existing authentication.
+
+Do not recreate existing layouts.
+
+Do not duplicate existing components.
+
+Reuse existing pages, layouts, middleware, providers, and utilities whenever possible.
+
+Follow the established project structure unless a documented architectural decision requires otherwise.
+
+## Architecture
+
+- Service Layer
+- DTO
+- Form Request
+- Policy
+- Resource
+- Enum
+
+Business logic must only exist inside Services.
+
+Controllers should only:
+
+- Validate Request
+- Call Service
+- Return Response
+
+Never place business logic inside Controllers or Models.
+
+## Coding Standards
+
+- Follow PSR-12.
+- Use strict typing.
+- Use dependency injection.
+- Use Eloquent relationships.
+- Use database transactions when multiple tables are modified.
+- Use Laravel Resources for responses.
+- Use Form Requests for validation.
+
+## Frontend
+
+Always use:
+
+- React 19
+- TypeScript
+- shadcn/ui
+- Tailwind CSS v4
+
+Create reusable components.
+
+Avoid duplicate UI.
+
+## Important
+
+Read `docs/project.md` before implementing any module.
+
+===
+
 <laravel-boost-guidelines>
 === foundation rules ===
 
