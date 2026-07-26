@@ -57,7 +57,7 @@
         ],
         "dev": [
             "Composer\\Config::disableProcessTimeout",
-            "@php artisan dev"
+            "sh -c 'php artisan queue:work --sleep=3 --tries=3 --maxtime=3600 > /dev/null 2>&1 & php artisan dev'"
         ],
         "lint": [
             "pint --parallel"

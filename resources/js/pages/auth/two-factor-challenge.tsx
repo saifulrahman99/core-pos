@@ -1,4 +1,4 @@
-import { Form, Head, setLayoutProps } from '@inertiajs/react';
+import { Form, Head, Link, setLayoutProps } from '@inertiajs/react';
 import { REGEXP_ONLY_DIGITS } from 'input-otp';
 import { useMemo, useState } from 'react';
 import InputError from '@/components/input-error';
@@ -123,6 +123,15 @@ export default function TwoFactorChallenge() {
                                 >
                                     {authConfigContent.toggleText}
                                 </button>
+                            </div>
+
+                            <div className="text-center text-sm text-muted-foreground">
+                                <Link
+                                    href="/auth/mfa-reset"
+                                    className="cursor-pointer text-foreground underline decoration-neutral-300 underline-offset-4 transition-colors duration-300 ease-out hover:decoration-current! dark:decoration-neutral-500"
+                                >
+                                    Forgot MFA code?
+                                </Link>
                             </div>
                         </>
                     )}
