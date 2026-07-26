@@ -8,7 +8,7 @@ import type { CategoryProps } from './types';
 import { index, update } from '@/routes/admin/categories';
 
 export default function CategoryEdit({ category }: CategoryProps) {
-    const { data, setData, post, processing, errors, reset } = useForm({
+    const { data, setData, patch, processing, errors, reset } = useForm({
         name: category.data.name,
         slug: category.data.slug,
         description: category.data.description ?? '',
@@ -19,7 +19,7 @@ export default function CategoryEdit({ category }: CategoryProps) {
 
     function handleSubmit(e: React.FormEvent) {
         e.preventDefault();
-        post(update.url(category.data.id), {
+        patch(update.url(category.data.id), {
             preserveScroll: true,
             onSuccess: () => reset(),
         });
