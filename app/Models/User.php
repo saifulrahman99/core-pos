@@ -42,6 +42,9 @@ class User extends Authenticatable implements HasMedia, PasskeyUser
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasRoles, InteractsWithMedia, LogsActivity, Notifiable, PasskeyAuthenticatable, SoftDeletes, TwoFactorAuthenticatable;
 
+    /** @var list<string> */
+    protected $appends = ['avatar_url'];
+
     /**
      * Get the attributes that should be cast.
      *
@@ -55,6 +58,17 @@ class User extends Authenticatable implements HasMedia, PasskeyUser
             'two_factor_confirmed_at' => 'datetime',
             'is_active' => 'boolean',
         ];
+    }
+
+    public function getAvatarUrlAttribute(): ?string
+    {
+        return $this->getFirstMediaUrl('avatar') ?: null;
+    }
+
+    public function registerMediaCollections(): void
+    {
+        $this->addMediaCollection('avatar')
+            ->singleFile();
     }
 
     public function getActivitylogOptions(): LogOptions

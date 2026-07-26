@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Store;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 
@@ -35,12 +36,19 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
+        $store = Store::query()->first();
+
         return [
             ...parent::share($request),
             'name' => config('app.name'),
             'auth' => [
                 'user' => $request->user(),
             ],
+            'store' => $store ? [
+                'id' => $store->id,
+                'name' => $store->name,
+                'logo_url' => $store->logo_url,
+            ] : null,
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
         ];
     }

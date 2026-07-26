@@ -35,7 +35,7 @@ export default function StoreSettings({ store }: { store: StoreProps }) {
                 />
 
                 <Tabs defaultValue="general">
-                    <TabsList>
+                    <TabsList className="w-full justify-start overflow-x-auto">
                         <TabsTrigger value="general">General</TabsTrigger>
                         <TabsTrigger value="branding">Branding</TabsTrigger>
                         <TabsTrigger value="contact">Contact</TabsTrigger>
