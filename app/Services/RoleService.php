@@ -6,6 +6,7 @@ use App\Models\Role;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Facades\Activity;
 use Spatie\Permission\Models\Permission;
 
 class RoleService
@@ -46,6 +47,8 @@ class RoleService
                 $role->syncPermissions($data['permissions']);
             }
 
+            Activity::causedBy(auth()->user())->event('role.created')->log("Created role: {$role->name}");
+
             return $role->load('permissions');
         });
     }
@@ -62,6 +65,8 @@ class RoleService
 
             $role->syncPermissions($data['permissions'] ?? []);
 
+            Activity::causedBy(auth()->user())->event('role.updated')->log("Updated role: {$role->name}");
+
             return $role->fresh('permissions');
         });
     }
@@ -72,9 +77,15 @@ class RoleService
     public function delete(Role $role): bool
     {
         return DB::transaction(function () use ($role) {
+            $name = $role->name;
             $role->permissions()->detach();
+            $result = $role->delete();
 
-            return $role->delete();
+            if ($result) {
+                Activity::causedBy(auth()->user())->event('role.deleted')->log("Deleted role: {$name}");
+            }
+
+            return $result;
         });
     }
 

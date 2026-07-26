@@ -1,4 +1,4 @@
-import { Head } from '@inertiajs/react';
+import { Head, setLayoutProps } from '@inertiajs/react';
 import { edit } from '@/routes/store';
 import Heading from '@/components/heading';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,6 +10,15 @@ import GeneralForm from './GeneralForm';
 import OperationalForm from './OperationalForm';
 import ReceiptForm from './ReceiptForm';
 import type { StoreProps } from './types';
+
+setLayoutProps({
+    breadcrumbs: [
+        {
+            title: 'Store',
+            href: edit(),
+        },
+    ],
+});
 
 export default function StoreSettings({ store }: { store: StoreProps }) {
     return (
@@ -68,12 +77,3 @@ export default function StoreSettings({ store }: { store: StoreProps }) {
         </>
     );
 }
-
-StoreSettings.layout = {
-    breadcrumbs: [
-        {
-            title: 'Store settings',
-            href: edit(),
-        },
-    ],
-};

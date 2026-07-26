@@ -1,4 +1,4 @@
-import { Form, Head, usePage } from '@inertiajs/react';
+import { Form, Head, setLayoutProps, usePage } from '@inertiajs/react';
 import { Link } from '@inertiajs/react';
 import ProfileController from '@/actions/App/Http/Controllers/Settings/ProfileController';
 import DeleteUser from '@/components/delete-user';
@@ -14,6 +14,15 @@ import type { Auth } from '@/types';
 type PageProps = {
     auth: Auth;
 };
+
+setLayoutProps({
+    breadcrumbs: [
+        {
+            title: 'Profile',
+            href: edit(),
+        },
+    ],
+});
 
 export default function Profile({
     mustVerifyEmail,
@@ -127,12 +136,3 @@ export default function Profile({
         </>
     );
 }
-
-Profile.layout = {
-    breadcrumbs: [
-        {
-            title: 'Profile settings',
-            href: edit(),
-        },
-    ],
-};

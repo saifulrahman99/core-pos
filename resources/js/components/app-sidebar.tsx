@@ -1,5 +1,5 @@
 import { Link } from '@inertiajs/react';
-import { BookOpen, FolderGit2, LayoutGrid, Shield, Users } from 'lucide-react';
+import { BookOpen, FolderGit2, History, LayoutGrid, Settings, Shield, Users } from 'lucide-react';
 import AppLogo from '@/components/app-logo';
 import { NavFooter } from '@/components/nav-footer';
 import { NavMain } from '@/components/nav-main';
@@ -14,8 +14,10 @@ import {
     SidebarMenuItem,
 } from '@/components/ui/sidebar';
 import { dashboard } from '@/routes';
+import { index as activityLogsIndex } from '@/routes/admin/activity-logs';
 import { index as rolesIndex } from '@/routes/admin/roles';
 import { index as usersIndex } from '@/routes/admin/users';
+import { edit as settingsEdit } from '@/routes/profile';
 import type { NavItem } from '@/types';
 
 const mainNavItems: NavItem[] = [
@@ -33,6 +35,16 @@ const mainNavItems: NavItem[] = [
         title: 'Users',
         href: usersIndex.url(),
         icon: Users,
+    },
+    {
+        title: 'Activity Logs',
+        href: activityLogsIndex.url(),
+        icon: History,
+    },
+    {
+        title: 'Settings',
+        href: settingsEdit(),
+        icon: Settings,
     },
 ];
 

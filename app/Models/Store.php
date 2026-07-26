@@ -6,6 +6,8 @@ use Database\Factories\StoreFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use Spatie\Activitylog\Models\Concerns\LogsActivity;
+use Spatie\Activitylog\Support\LogOptions;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -33,7 +35,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
 class Store extends Model implements HasMedia
 {
     /** @use HasFactory<StoreFactory> */
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, LogsActivity;
 
     protected $fillable = [
         'name',
@@ -57,6 +59,18 @@ class Store extends Model implements HasMedia
     protected function casts(): array
     {
         return [];
+    }
+
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->logOnly([
+                'name', 'tagline', 'description', 'phone', 'whatsapp', 'email',
+                'website', 'address', 'google_maps_url', 'currency', 'timezone',
+                'language', 'receipt_header', 'receipt_footer', 'opening_time', 'closing_time',
+            ])
+            ->logOnlyDirty()
+            ->dontLogEmptyChanges();
     }
 
     /**

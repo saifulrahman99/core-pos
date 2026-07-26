@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified', 'two-factor'])->prefix('admin')->name('admin.')->group(function () {
+    Route::get('activity-logs', [ActivityLogController::class, 'index'])->name('activity-logs.index');
+
     Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
     Route::get('roles/create', [RoleController::class, 'create'])->name('roles.create');
     Route::post('roles', [RoleController::class, 'store'])->name('roles.store');

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Store;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Spatie\Activitylog\Facades\Activity;
 
 class StoreService
 {
@@ -35,6 +36,8 @@ class StoreService
             $store->update($data);
 
             $this->handleMediaUploads($store, $files);
+
+            Activity::causedBy(auth()->user())->event('store.updated')->log('Updated store settings');
 
             return $store->fresh();
         });

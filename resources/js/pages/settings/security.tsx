@@ -1,4 +1,4 @@
-import { Form, Head } from '@inertiajs/react';
+import { Form, Head, setLayoutProps } from '@inertiajs/react';
 import { AlertTriangle } from 'lucide-react';
 import { useRef } from 'react';
 import SecurityController from '@/actions/App/Http/Controllers/Settings/SecurityController';
@@ -19,6 +19,15 @@ type Props = {
     isTwoFactorRequired?: boolean;
 } & ManagePasskeysProps &
     ManageTwoFactorProps;
+
+setLayoutProps({
+    breadcrumbs: [
+        {
+            title: 'Security',
+            href: edit(),
+        },
+    ],
+});
 
 export default function Security(props: Props) {
     const passwordInput = useRef<HTMLInputElement>(null);
@@ -150,12 +159,3 @@ export default function Security(props: Props) {
         </>
     );
 }
-
-Security.layout = {
-    breadcrumbs: [
-        {
-            title: 'Security settings',
-            href: edit(),
-        },
-    ],
-};

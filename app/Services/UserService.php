@@ -7,6 +7,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Spatie\Activitylog\Facades\Activity;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\Permission\Models\Role;
 
@@ -58,6 +59,8 @@ class UserService
                 $user->addMedia($data['avatar'])->toMediaCollection('avatar');
             }
 
+            Activity::causedBy(auth()->user())->event('user.created')->log("Created user: {$user->name}");
+
             return $user->load(['roles', 'media']);
         });
     }
@@ -83,6 +86,8 @@ class UserService
                 $user->addMedia($data['avatar'])->toMediaCollection('avatar');
             }
 
+            Activity::causedBy(auth()->user())->event('user.updated')->log("Updated user: {$user->name}");
+
             return $user->fresh(['roles', 'media']);
         });
     }
@@ -92,7 +97,14 @@ class UserService
      */
     public function delete(User $user): bool
     {
-        return $user->delete();
+        $name = $user->name;
+        $result = $user->delete();
+
+        if ($result) {
+            Activity::causedBy(auth()->user())->event('user.deleted')->log("Deleted user: {$name}");
+        }
+
+        return $result;
     }
 
     /**
@@ -101,6 +113,8 @@ class UserService
     public function restore(User $user): User
     {
         $user->restore();
+
+        Activity::causedBy(auth()->user())->event('user.restored')->log("Restored user: {$user->name}");
 
         return $user->fresh(['roles', 'media']) ?? $user;
     }
@@ -128,6 +142,8 @@ class UserService
             'password' => Hash::make($password),
         ]);
 
+        Activity::causedBy(auth()->user())->event('user.password_reset')->log("Reset password for user: {$user->name}");
+
         return $user;
     }
 
@@ -136,9 +152,13 @@ class UserService
      */
     public function toggleActive(User $user): User
     {
+        $newStatus = ! $user->is_active;
         $user->update([
-            'is_active' => ! $user->is_active,
+            'is_active' => $newStatus,
         ]);
+
+        $statusText = $newStatus ? 'activated' : 'deactivated';
+        Activity::causedBy(auth()->user())->event('user.toggled_active')->log("{$statusText} user: {$user->name}");
 
         return $user->fresh(['roles', 'media']) ?? $user;
     }
